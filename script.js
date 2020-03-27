@@ -2,50 +2,19 @@ const selections = ['rock', 'paper', 'scissors'];
 const WINNING_SCORE = 3; //best 3 of 5
 const GAME_WON = 'You Won!';
 const GAME_LOST = 'You Lost!';
+const NEW_GAME_TEXT = 'Click your choice to play again.';
 
-//runs full game
-function game() {
-  let userSelection;
-  let computerSelection;
-  let roundWinnerNumber;
-  let userScore = 0;
-  let computerScore = 0;
-  while(userScore < WINNING_SCORE && computerScore < WINNING_SCORE) {
-    userSelection = getUserChoice().toLowerCase();
-    //validate user input
-    if(!selections.includes(userSelection)){
-      console.log('Invalid input. Exiting...');
-      return null;
-    } else {
-      computerSelection = randomPlay();
-      roundWinnerNumber = getRoundWinner(userSelection, computerSelection);
-      if(roundWinnerNumber < 0) {
-        userScore += 1;
-      }
-      if(roundWinnerNumber > 0) {
-        computerScore += 1;
-      }
-      console.log(getRoundOutcome(roundWinnerNumber, userSelection, computerSelection));
-    }
-  }
-  if(userScore == WINNING_SCORE){
-    console.log(`${GAME_WON} (${userScore} to ${computerScore})`);
-  } else {
-    console.log(`${GAME_LOST} (${computerScore} to ${userScore})`);
-  }
-}
-
-//returns outcome of round as string
-function getRoundOutcome(roundWinnerNumber, userSelection, computerSelection) {
+//returns outcome of round
+function getRoundResults(roundWinnerNumber, userSelection, computerSelection) {
   //WIN
   if(roundWinnerNumber < 0) {
-    return `round won (${userSelection} beats ${computerSelection})`;
+    return `Round won! (${userSelection} beats ${computerSelection})`;
   //TIE
   } else if(roundWinnerNumber === 0) {
-    return `round tie (both played ${userSelection})`;
+    return `Round tie! (both played ${userSelection})`;
   //LOSS
   } else {
-    return `round loss (${userSelection} loses to ${computerSelection})`;
+    return `Round loss! (${userSelection} loses to ${computerSelection})`;
   }
 }
 
@@ -65,10 +34,49 @@ function getRoundWinner(userSelection, computerSelection) {
   }
 }
 
-//returns user typed prompt
-function getUserChoice() {
-  let input = window.prompt('Choose rock, paper, or scissors', '')
-  return (input === null) ? '':input;
+//handles playing of a single round when choice is clicked
+function playRound(e) {
+  //DOM elements used
+  const userName = document.querySelector('#user-name');
+  const userScore = document.querySelector('#user-score');
+  const results = document.querySelector('#results');
+  const computerName = document.querySelector('#computer-name');
+  const computerScore = document.querySelector('#computer-score');
+
+  //starting new game
+  if(parseInt(userScore.innerHTML) >= WINNING_SCORE || parseInt(computerScore.innerHTML) >= WINNING_SCORE) {
+    //reset scores before next round
+    userScore.innerHTML = 0;
+    computerScore.innerHTML = 0;
+  }
+
+  //play normal round (add +1 to winner)
+  const userSelection = e.target.id;
+  const computerSelection = randomPlay();
+  const winnerNumber = getRoundWinner(userSelection, computerSelection);
+
+  //TIE
+  if(winnerNumber === 0) {
+    results.innerHTML = getRoundResults(winnerNumber, userSelection, computerSelection);
+  //WIN
+  } else if(winnerNumber < 0) {
+    userScore.innerHTML = parseInt(userScore.innerHTML) + 1;
+    //check if game over
+    if(parseInt(userScore.innerHTML) >= WINNING_SCORE) {
+      results.innerHTML = GAME_WON;
+    } else {
+      results.innerHTML = getRoundResults(winnerNumber, userSelection, computerSelection);
+    }
+  //LOSS
+  } else {
+    computerScore.innerHTML = parseInt(computerScore.innerHTML) + 1;
+    //check if game over
+    if(parseInt(computerScore.innerHTML) >= WINNING_SCORE) {
+      results.innerHTML = GAME_LOST;
+    } else {
+      results.innerHTML = getRoundResults(winnerNumber, userSelection, computerSelection);
+    }
+  }
 }
 
 //returns random selection
@@ -76,5 +84,10 @@ function randomPlay() {
   return selections[Math.floor(Math.random()*selections.length)]
 }
 
-//executed code
-game();
+//addEventListener for each clickable image
+const choices = document.querySelectorAll('.choices-img');
+choices.forEach((choice) =>
+  choice.addEventListener('click', playRound)
+);
+
+document.querySelector('#results').innerHTML = `Click your choice to begin playing (best of ${WINNING_SCORE * 2 -1}).`;

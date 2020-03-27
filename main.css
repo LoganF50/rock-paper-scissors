@@ -1,0 +1,60 @@
+body {
+  --accent-color-main: #0aac9e;
+  --bg-color-main: #2d2d2d;
+  --bg-color-secondary: #ccd7da;
+  background-color: var(--bg-color-main);
+  color: var(--accent-color-main);
+  text-align: center;
+}
+
+.game-header {
+  font-size: 5.0rem;
+  margin: 0 auto;
+}
+
+.game-area {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.game-results {
+  font-size: 1.8rem;
+  font-weight: 600;
+  padding: 20px;
+}
+
+.choices {
+  padding: 20px;
+}
+
+  .choices-img {
+    max-width: 200px;
+    padding: 10px;
+  }
+
+  .choices-img:hover {
+    transform: scale(1.1);
+  }
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+  .scoreboard-player {
+    background-color: var(--bg-color-secondary);
+    border: 10px solid var(--accent-color-main);
+    border-radius: 10px;
+    padding: 15px;
+    min-width: 250px;
+    font-weight: 600;
+  }
+
+    .scoreboard-player-score {
+      font-size: 5.0rem;
+    }
+
+    .scoreboard-player-name {
+      font-size: 1.8rem;
+    }

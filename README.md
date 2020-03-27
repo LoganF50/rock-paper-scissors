@@ -1,3 +1,3 @@
 From the Odin Project.
 
-Create rock paper scissors playable from the browser console.
+Update to be playable through the browser by clicking buttons on the screen.
