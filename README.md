@@ -1,3 +1,11 @@
+# Rock Paper Scissors
+
 From the Odin Project.
 
-Update to be playable through the browser by clicking buttons on the screen.
+RPS playable through the browser.
+
+## Features
+
+Play best of 5
+
+Click on images to make selections
